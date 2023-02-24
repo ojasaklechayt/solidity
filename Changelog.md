@@ -15,6 +15,10 @@ Bugfixes:
  * Antlr Grammar: Fix divergent behaviour which allowed octal numbers.
 
 
+AST Changes:
+ * AST: Add ``suffix`` field to ``FunctionDefinition`` AST node.
+
+
 ### 0.8.19 (2023-02-22)
 
 Language Features:
