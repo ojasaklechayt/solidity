@@ -10,6 +10,9 @@ Compiler Features:
 
 
 Bugfixes:
+ * Antlr Grammar: Fix of a discrepancy which allowed numbers followed by an identifier with no whitespace.
+ * Antlr Grammar: Stricter rules for function definitions will no longer accept as valid free functions having some specifiers which are exclusive of contract functions.
+ * Antlr Grammar: Fix divergent behaviour which allowed octal numbers.
 
 
 ### 0.8.19 (2023-02-22)
