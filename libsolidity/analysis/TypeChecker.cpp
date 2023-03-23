@@ -4116,10 +4116,12 @@ void TypeChecker::endVisit(Literal const& _literal)
 						conversionErrorMessage = "The number is out of range of";
 					else
 					{
-						if (!literalRationalType)
-							conversionErrorMessage = "The literal";
-						else
+						if (literalRationalType)
 							conversionErrorMessage = "The number";
+						else if (dynamic_cast<AddressType const*>(literalType))
+							conversionErrorMessage = "The address";
+						else
+							conversionErrorMessage = "The literal";
 
 						conversionErrorMessage += " cannot be converted to";
 					}
