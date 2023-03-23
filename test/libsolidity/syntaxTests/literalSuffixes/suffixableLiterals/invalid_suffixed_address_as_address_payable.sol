@@ -6,4 +6,4 @@ contract C {
     }
 }
 // ----
-// TypeError 8838: (140-189): The literal cannot be converted to the type accepted by the suffix function.
+// TypeError 8838: (140-189): The literal cannot be converted to type address payable accepted by the suffix function.

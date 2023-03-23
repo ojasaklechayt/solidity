@@ -10,5 +10,5 @@ contract C {
     }
 }
 // ----
-// TypeError 8838: (321-337): The literal cannot be converted to the type accepted by the suffix function.
-// TypeError 8838: (347-364): The literal cannot be converted to the type accepted by the suffix function.
+// TypeError 8838: (321-337): The literal cannot be converted to type string accepted by the suffix function.
+// TypeError 8838: (347-364): The literal cannot be converted to type string accepted by the suffix function.

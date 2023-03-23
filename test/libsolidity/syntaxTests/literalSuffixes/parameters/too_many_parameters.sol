@@ -26,9 +26,5 @@ contract C {
 // TypeError 9128: (120-165): Functions that take 3 or more arguments cannot be used as literal suffixes.
 // TypeError 1587: (232-253): Literal suffix function has invalid parameter types. The exponent parameter must be an unsigned integer.
 // TypeError 1587: (320-341): Literal suffix function has invalid parameter types. The mantissa parameter must be an integer.
-// TypeError 8838: (502-520): This number is suffixed by a function with wrong type of parameters.
-// TypeError 8838: (530-548): This number is suffixed by a function with wrong type of parameters.
-// TypeError 8838: (629-649): This number is suffixed by a function with wrong type of parameters.
-// TypeError 8838: (659-679): This number is suffixed by a function with wrong type of parameters.
 // TypeError 2505: (760-780): Functions that take 2 arguments can only be used as literal suffixes for rational numbers.
 // TypeError 2505: (790-810): Functions that take 2 arguments can only be used as literal suffixes for rational numbers.

@@ -453,16 +453,16 @@ bool TypeChecker::visit(FunctionDefinition const& _function)
 
 			vector<string> mantissaOrExponentTypeErrorMessages;
 			if (!mantissaType)
-				mantissaOrExponentTypeErrorMessages.emplace_back("The mantissa parameter must be an integer");
+				mantissaOrExponentTypeErrorMessages.emplace_back("The mantissa parameter must be an integer.");
 			if (!exponentType)
-				mantissaOrExponentTypeErrorMessages.emplace_back("The exponent parameter must be an unsigned integer");
+				mantissaOrExponentTypeErrorMessages.emplace_back("The exponent parameter must be an unsigned integer.");
 
 			if (!mantissaOrExponentTypeErrorMessages.empty())
 				m_errorReporter.typeError(
 					1587_error,
 					_function.parameterList().location(),
 					"Literal suffix function has invalid parameter types. " +
-					joinHumanReadable(mantissaOrExponentTypeErrorMessages, ".") + "."
+					joinHumanReadable(mantissaOrExponentTypeErrorMessages, " ")
 				);
 
 			if (exponentType && exponentType->isSigned())
@@ -3976,33 +3976,28 @@ bool TypeChecker::visit(Literal const& _literal)
 	auto const* literalRationalType = dynamic_cast<RationalNumberType const*>(literalType);
 	if (_literal.isSuffixed() && !_literal.hasSubDenomination() && literalRationalType)
 	{
-		optional<string> rangeErrorMessage;
-		if (!literalRationalType->mobileType())
-			rangeErrorMessage = "The literal is out of range of any supported integer type.";
-		else
+		auto&& [mantissa, exponent] = literalRationalType->mantissaExponent();
+		if (!mantissa || !exponent)
 		{
-			auto&& [mantissa, exponent] = literalRationalType->mantissaExponent();
-			if (!mantissa || !exponent)
-			{
-				string mantissaOrExponentErrorMessage;
-				if (!mantissa && !exponent)
-					mantissaOrExponentErrorMessage = "The mantissa and the exponent are";
-				else if (!exponent)
-					mantissaOrExponentErrorMessage = "The exponent is";
-				else
-					mantissaOrExponentErrorMessage = "The mantissa is";
+			string mantissaOrExponentErrorMessage;
+			if (!mantissa && !exponent)
+				mantissaOrExponentErrorMessage = "The mantissa and the exponent are";
+			else if (!exponent)
+				mantissaOrExponentErrorMessage = "The exponent is";
+			else
+				mantissaOrExponentErrorMessage = "The mantissa is";
 
-				rangeErrorMessage = fmt::format(
+			m_errorReporter.typeError(
+				5503_error,
+				_literal.location(),
+				fmt::format(
 					"This number cannot be decomposed into a mantissa and decimal exponent "
 					"that fit the range of parameters of any possible suffix function. "
 					"{} out of range of the largest supported integer type.",
 					mantissaOrExponentErrorMessage
-				);
-			}
+				)
+			);
 		}
-
-		if (rangeErrorMessage.has_value())
-			m_errorReporter.typeError(5503_error, _literal.location(), rangeErrorMessage.value());
 	}
 
 	// NOTE: For suffixed literals this is not the final type yet. We will update it in endVisit()
@@ -4071,8 +4066,8 @@ void TypeChecker::endVisit(Literal const& _literal)
 						"Functions that take 2 arguments can only be used as literal suffixes for rational numbers."
 					);
 				else if (
-					!!dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(0)) &&
-					!!dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(1))
+					dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(0)) &&
+					dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(1))
 				)
 				{
 					auto&& [mantissa, exponent] = literalRationalType->mantissaExponent();
@@ -4082,59 +4077,58 @@ void TypeChecker::endVisit(Literal const& _literal)
 					// TODO: Is this triggered when the argument is out of range? Test.
 					else
 					{
-						//optional<string> mantissaOrExponentErrorMessage;
 						vector<string> mantissaOrExponentErrorMessages;
 						if (!mantissa->isImplicitlyConvertibleTo(*suffixFunctionType->parameterTypes().at(0)))
 							mantissaOrExponentErrorMessages.emplace_back(
 								fmt::format(
-									"The mantissa is out of range of type {}",
+									"The mantissa is out of range of type {}.",
 									suffixFunctionType->parameterTypes().at(0)->toString(true)
 								)
 							);
 						if (!exponent->isImplicitlyConvertibleTo(*suffixFunctionType->parameterTypes().at(1)))
-						{
 							mantissaOrExponentErrorMessages.emplace_back(
 								fmt::format(
-									"The exponent is out of range of type {}",
+									"The exponent is out of range of type {}.",
 									suffixFunctionType->parameterTypes().at(1)->toString(true)
 								)
 							);
-						}
 
 						if (!mantissaOrExponentErrorMessages.empty())
 							parameterTypeMessage =
 								"This number cannot be decomposed into a mantissa and decimal exponent "
 								"that fit the range of parameters of the suffix function. " +
-								joinHumanReadable(mantissaOrExponentErrorMessages, ".") + ".";
+								joinHumanReadable(mantissaOrExponentErrorMessages, " ");
 					}
 				}
 				else
-				{
-					// visit(FunctionDefinition) should have spotted if any of the parameters is not Integer
+					// visit(FunctionDefinition) should have spotted if any of the parameters is not IntegerType
 					solAssert(!m_errorReporter.errors().empty());
-					parameterTypeMessage = "This number is suffixed by a function with wrong type of parameters.";
-				}
 			}
 			else if (suffixFunctionType->parameterTypes().size() == 1)
 			{
 				if (!literalType->isImplicitlyConvertibleTo(*suffixFunctionType->parameterTypes().at(0)))
 				{
-					if (!literalRationalType)
-						parameterTypeMessage = "The literal cannot be converted to the type accepted by the suffix function.";
+					string conversionErrorMessage;
+					if (
+						dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(0)) &&
+						literalRationalType
+					)
+						conversionErrorMessage = "The number is out of range of";
 					else
 					{
-						string conversionErrorMessage;
-						if (!!dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(0)))
-							conversionErrorMessage = "is out of range of";
+						if (!literalRationalType)
+							conversionErrorMessage = "The literal";
 						else
-							conversionErrorMessage = "cannot be converted to";
+							conversionErrorMessage = "The number";
 
-						parameterTypeMessage = fmt::format(
-							"The number {} type {} accepted by the suffix function.",
-							conversionErrorMessage,
-							suffixFunctionType->parameterTypes().at(0)->toString(true)
-						);
+						conversionErrorMessage += " cannot be converted to";
 					}
+
+					parameterTypeMessage = fmt::format(
+						"{} type {} accepted by the suffix function.",
+						conversionErrorMessage,
+						suffixFunctionType->parameterTypes().at(0)->toString(true)
+					);
 				}
 			}
 			else
