@@ -11,6 +11,13 @@ contract C {
         return 2 half + int128(2 half128) + 2 half64s;
     }
 
+    function negative() public pure returns (int) {
+        return
+            -2 half +
+            -int128(2 half128) +
+            -2 half64s;
+    }
+
     function max() public pure returns (int) {
         return
             0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff half +
@@ -28,5 +35,6 @@ contract C {
 // ----
 // zero() -> 0
 // two() -> 3
+// negative() -> -3
 // max() -> 0x4000000000000000000000000000000080000000000000003ffffffffffffffd
 // withDecimals() -> 421
