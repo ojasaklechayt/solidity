@@ -87,8 +87,8 @@ contract C {
 // TypeError 2505: (1444-1500): Functions that take 2 arguments can only be used as literal suffixes for rational numbers.
 // TypeError 8838: (1510-1565): The address cannot be converted to type string accepted by the suffix function.
 // TypeError 8838: (1575-1629): The address cannot be converted to type bytes accepted by the suffix function.
-// TypeError 8838: (1640-1654): The number is out of range of type uint256 accepted by the suffix function.
-// TypeError 8838: (1664-1678): The number is out of range of type int8 accepted by the suffix function.
+// TypeError 8838: (1640-1654): The number cannot be converted to type uint256 accepted by the suffix function.
+// TypeError 8838: (1664-1678): The number cannot be converted to type int8 accepted by the suffix function.
 // TypeError 8838: (1688-1702): The number cannot be converted to type bool accepted by the suffix function.
 // TypeError 8838: (1712-1729): The number cannot be converted to type address accepted by the suffix function.
 // TypeError 8838: (1777-1793): The number cannot be converted to type string accepted by the suffix function.

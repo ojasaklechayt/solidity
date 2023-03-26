@@ -4129,7 +4129,13 @@ void TypeChecker::endVisit(Literal const& _literal)
 						dynamic_cast<IntegerType const*>(suffixFunctionType->parameterTypes().at(0)) &&
 						literalRationalType
 					)
-						conversionErrorMessage = "The number is out of range of";
+					{
+						conversionErrorMessage = "The number";
+						if (literalRationalType->isFractional())
+							conversionErrorMessage += " cannot be converted to";
+						else
+							conversionErrorMessage += " is out of range of";
+					}
 					else
 					{
 						if (literalRationalType)
