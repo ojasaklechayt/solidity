@@ -4119,6 +4119,8 @@ void TypeChecker::endVisit(Literal const& _literal)
 						if (literalRationalType)
 							conversionErrorMessage = "The number";
 						else if (dynamic_cast<AddressType const*>(literalType))
+							// Address literals and hex numbers are not easy to distinguish without counting the digits.
+							// The user may not even realize we see it as an address. Let's point that out in the message for clarity.
 							conversionErrorMessage = "The address";
 						else
 							conversionErrorMessage = "The literal";
