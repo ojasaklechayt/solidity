@@ -3973,8 +3973,24 @@ bool TypeChecker::visit(Literal const& _literal)
 		[&](Literal::SubDenomination) {},
 	}, _literal.suffix());
 
+	FunctionDefinition const* literalSuffixFunction = std::visit(util::GenericVisitor{
+		[&](ASTPointer<Identifier> const& _identifier) {
+			return dynamic_cast<FunctionDefinition const*>(_identifier->annotation().referencedDeclaration);
+		},
+		[&](ASTPointer<MemberAccess> const& _memberAccess) {
+			return dynamic_cast<FunctionDefinition const*>(_memberAccess->annotation().referencedDeclaration);
+		},
+		[&](Literal::SubDenomination) -> FunctionDefinition const* { return nullptr; },
+	}, _literal.suffix());
+
 	auto const* literalRationalType = dynamic_cast<RationalNumberType const*>(literalType);
-	if (_literal.isSuffixed() && !_literal.hasSubDenomination() && literalRationalType)
+	if (
+		_literal.isSuffixed() &&
+		!_literal.hasSubDenomination() &&
+		literalRationalType &&
+		literalSuffixFunction &&
+		literalSuffixFunction->parameterList().parameters().size() == 2
+	)
 	{
 		auto&& [mantissa, exponent] = literalRationalType->mantissaExponent();
 		if (!mantissa || !exponent)
