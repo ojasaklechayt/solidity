@@ -38,9 +38,17 @@
 
 set -euo pipefail
 
-READLINK=readlink
+READLINK="readlink"
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    READLINK=greadlink
+    READLINK="greadlink"
+fi
+EXPR="expr"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    EXPR="gexpr"
+fi
+AWK="awk"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    AWK="gawk"
 fi
 REPO_ROOT=$(${READLINK} -f "$(dirname "$0")"/..)
 SOLIDITY_BUILD_DIR=${SOLIDITY_BUILD_DIR:-${REPO_ROOT}/build}
@@ -156,7 +164,7 @@ function split_combined_json
         local path=${path_with_contract}
         local contract=""
         local delimiter
-        delimiter="$(gexpr index "${path}" ":")" || true
+        delimiter=$("$EXPR" index "${path}" ":") || true
         # shellcheck disable=SC2181
         if [[ -z "$prefix" ]]
         then
@@ -266,7 +274,7 @@ function test_evmjson_via_ir_and_yul_import_export
       # take the yul file and export it as evm assembly json. save the result in "$yulfile.asm.json".
       run_solc_store_stdout "$yulfile.asm.json" --strict-assembly "$yulfile" --optimize --asm-json --pretty-json --json-indent 4
       # remove the lines containing '=======', so that we just have a nice json file.
-      gawk -i inplace '!/^=======/' "$yulfile.asm.json"
+      "${AWK}" -i inplace '!/^=======/' "$yulfile.asm.json"
       # import the created evm assembly json file and create a combined json out of it.
       run_solc_store_stdout "$yulfile.combined.json" --combined-json "bin,bin-runtime,opcodes,asm,srcmap,srcmap-runtime" --pretty-json --json-indent 4 --import-asm-json "$yulfile.asm.json"
       # split the combined json into different files.
@@ -290,7 +298,7 @@ function test_evmjson_via_ir_and_yul_import_export
 
       # delimiter is just the position of that dot that is delimiting the contract
       # name from it's type.
-      delimiter="$(gexpr index "${type}" ".")"
+      delimiter=$("$EXPR" index "${type}" ".")
 
       # extract the type: for e.g. "C.asm" -> type will be "asm".
       type=${type:(($delimiter)):((${#type} - $delimiter))}
@@ -357,7 +365,7 @@ function test_evmjson_import_export_equivalence
     local success=1
 
     # export sol to yul. generate artefacts from sol and convert yul to asm json.
-    # import the yul asm json and check whether the sol artefacts are the same for as for yul.
+    # import the yul asm json and check whether the sol artefacts are the same as for yul.
     if ! test_evmjson_via_ir_and_yul_import_export "$sol_file" "${input_files[@]}"
     then
         success=0
@@ -367,7 +375,7 @@ function test_evmjson_import_export_equivalence
     if (( success == 1 ))
     then
         # generate artefacts from sol. export sol to asm json. import that asm json and
-        # check whether the sol artefacts are the same the artefacts created by the asm json import.
+        # check whether the sol artefacts are the same as created by the asm json import.
         if ! test_evmjson_sol_import_export "$sol_file" "${input_files[@]}"
         then
             success=0
@@ -444,6 +452,9 @@ WORKINGDIR=$PWD
 
 command_available "$SOLC" --version
 command_available jq --version
+command_available "$EXPR" --version
+command_available "$AWK"
+command_available "$READLINK" --version
 
 case "$IMPORT_TEST_TYPE" in
     ast) TEST_DIRS=("${SYNTAXTESTS_DIR}" "${ASTJSONTESTS_DIR}") ;;
