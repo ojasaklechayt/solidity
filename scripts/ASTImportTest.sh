@@ -46,10 +46,7 @@ EXPR="expr"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     EXPR="gexpr"
 fi
-AWK="awk"
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    AWK="gawk"
-fi
+
 REPO_ROOT=$(${READLINK} -f "$(dirname "$0")"/..)
 SOLIDITY_BUILD_DIR=${SOLIDITY_BUILD_DIR:-${REPO_ROOT}/build}
 SOLC="${SOLIDITY_BUILD_DIR}/solc/solc"
@@ -274,7 +271,7 @@ function test_evmjson_via_ir_and_yul_import_export
       # take the yul file and export it as evm assembly json. save the result in "$yulfile.asm.json".
       run_solc_store_stdout "$yulfile.asm.json" --strict-assembly "$yulfile" --optimize --asm-json --pretty-json --json-indent 4
       # remove the lines containing '=======', so that we just have a nice json file.
-      "${AWK}" -i inplace '!/^=======/' "$yulfile.asm.json"
+      grep -v '^=======' "$yulfile.asm.json" > tmpfile && mv tmpfile "$yulfile.asm.json"
       # import the created evm assembly json file and create a combined json out of it.
       run_solc_store_stdout "$yulfile.combined.json" --combined-json "bin,bin-runtime,opcodes,asm,srcmap,srcmap-runtime" --pretty-json --json-indent 4 --import-asm-json "$yulfile.asm.json"
       # split the combined json into different files.
@@ -453,7 +450,6 @@ WORKINGDIR=$PWD
 command_available "$SOLC" --version
 command_available jq --version
 command_available "$EXPR" --version
-command_available "$AWK"
 command_available "$READLINK" --version
 
 case "$IMPORT_TEST_TYPE" in
