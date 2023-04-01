@@ -64,12 +64,20 @@ Global Variables
 - ``this`` (current contract's type): the current contract, explicitly convertible to ``address`` or ``address payable``
 - ``super``: the contract one level higher in the inheritance hierarchy
 - ``selfdestruct(address payable recipient)``: destroy the current contract, sending its funds to the given address
+
+Members of Address Types
+========================
+
 - ``<address>.balance`` (``uint256``): balance of the :ref:`address` in Wei
 - ``<address>.code`` (``bytes memory``): code at the :ref:`address` (can be empty)
 - ``<address>.codehash`` (``bytes32``): the codehash of the :ref:`address`
 - ``<address payable>.send(uint256 amount) returns (bool)``: send given amount of Wei to :ref:`address`,
   returns ``false`` on failure
 - ``<address payable>.transfer(uint256 amount)``: send given amount of Wei to :ref:`address`, throws on failure
+
+Type Information
+================
+
 - ``type(C).name`` (``string``): the name of the contract
 - ``type(C).creationCode`` (``bytes memory``): creation bytecode of the given contract, see :ref:`Type Information<meta-type>`.
 - ``type(C).runtimeCode`` (``bytes memory``): runtime bytecode of the given contract, see :ref:`Type Information<meta-type>`.
