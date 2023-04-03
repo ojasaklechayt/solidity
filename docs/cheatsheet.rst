@@ -26,19 +26,26 @@ ABI Encoding and Decoding Functions
   tuple. Performs a full type-check, ensuring the types match the function signature. Result equals ``abi.encodeWithSelector(functionPointer.selector, (...))``
 - ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent
   to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)``
-  
-Members of bytes
-================
+
+Members of ``bytes`` and  ``string``
+====================================
   
 - ``bytes.concat(...) returns (bytes memory)``: :ref:`Concatenates variable number of
   arguments to one byte array<bytes-concat>`
   
-Members of string
-=================
-  
 - ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of
   arguments to one string array<string-concat>`
-  
+
+Members of Address Types
+========================
+
+- ``<address>.balance`` (``uint256``): balance of the :ref:`address` in Wei
+- ``<address>.code`` (``bytes memory``): code at the :ref:`address` (can be empty)
+- ``<address>.codehash`` (``bytes32``): the codehash of the :ref:`address`
+- ``<address payable>.send(uint256 amount) returns (bool)``: send given amount of Wei to :ref:`address`,
+  returns ``false`` on failure
+- ``<address payable>.transfer(uint256 amount)``: send given amount of Wei to :ref:`address`, throws on failure
+
 Block and Transaction Properties
 ================================
   
@@ -59,8 +66,8 @@ Block and Transaction Properties
 - ``tx.gasprice`` (``uint``): gas price of the transaction
 - ``tx.origin`` (``address``): sender of the transaction (full call chain)
 
-Error Handling
-==============
+Error Reporting
+===============
 
 - ``assert(bool condition)``: abort execution and revert state changes if condition is ``false`` (use for internal error)
 - ``require(bool condition)``: abort execution and revert state changes if condition is ``false`` (use
@@ -83,22 +90,12 @@ Mathematical and Cryptographic Functions
 - ``mulmod(uint x, uint y, uint k) returns (uint)``: compute ``(x * y) % k`` where the multiplication is performed
   with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
   
-Contract Related
+Contract-related
 ================
 
 - ``this`` (current contract's type): the current contract, explicitly convertible to ``address`` or ``address payable``
 - ``super``: the contract one level higher in the inheritance hierarchy
 - ``selfdestruct(address payable recipient)``: destroy the current contract, sending its funds to the given address
-
-Members of Address Types
-========================
-
-- ``<address>.balance`` (``uint256``): balance of the :ref:`address` in Wei
-- ``<address>.code`` (``bytes memory``): code at the :ref:`address` (can be empty)
-- ``<address>.codehash`` (``bytes32``): the codehash of the :ref:`address`
-- ``<address payable>.send(uint256 amount) returns (bool)``: send given amount of Wei to :ref:`address`,
-  returns ``false`` on failure
-- ``<address payable>.transfer(uint256 amount)``: send given amount of Wei to :ref:`address`, throws on failure
 
 Type Information
 ================
