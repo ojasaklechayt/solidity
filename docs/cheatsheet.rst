@@ -9,7 +9,7 @@ Order of Precedence of Operators
 
 .. include:: types/operator-precedence-table.rst
 
-.. index:: balance, codehash, assert, block, coinbase, difficulty, prevrandao, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin, revert, require, keccak256, ripemd160, sha256, ecrecover, addmod, mulmod, cryptography, this, super, selfdestruct, send
+.. index:: cryptography
 
 ABI Encoding and Decoding Functions
 ===================================
@@ -36,6 +36,8 @@ Members of ``bytes`` and  ``string``
 - ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of
   arguments to one string array<string-concat>`
 
+.. index:: balance, codehash, send
+
 Members of Address Types
 ========================
 
@@ -45,6 +47,8 @@ Members of Address Types
 - ``<address payable>.send(uint256 amount) returns (bool)``: send given amount of Wei to :ref:`address`,
   returns ``false`` on failure
 - ``<address payable>.transfer(uint256 amount)``: send given amount of Wei to :ref:`address`, throws on failure
+
+.. index:: block, coinbase, difficulty, prevrandao, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
 
 Block and Transaction Properties
 ================================
@@ -66,6 +70,8 @@ Block and Transaction Properties
 - ``tx.gasprice`` (``uint``): gas price of the transaction
 - ``tx.origin`` (``address``): sender of the transaction (full call chain)
 
+.. index:: assert, require, revert
+
 Error Reporting
 ===============
 
@@ -76,6 +82,8 @@ Error Reporting
   condition is ``false`` (use for malformed input or error in external component). Also provide error message.
 - ``revert()``: abort execution and revert state changes
 - ``revert(string memory message)``: abort execution and revert state changes providing an explanatory string
+
+.. index:: keccak256, ripemd160, sha256, ecrecover, addmod, mulmod
 
 Mathematical and Cryptographic Functions
 ========================================
@@ -89,6 +97,8 @@ Mathematical and Cryptographic Functions
   arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
 - ``mulmod(uint x, uint y, uint k) returns (uint)``: compute ``(x * y) % k`` where the multiplication is performed
   with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
+
+.. index:: this, super, selfdestruct
 
 Contract-related
 ================
