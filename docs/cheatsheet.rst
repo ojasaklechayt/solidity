@@ -29,10 +29,10 @@ ABI Encoding and Decoding Functions
 
 Members of ``bytes`` and  ``string``
 ====================================
-  
+
 - ``bytes.concat(...) returns (bytes memory)``: :ref:`Concatenates variable number of
   arguments to one byte array<bytes-concat>`
-  
+
 - ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of
   arguments to one string array<string-concat>`
 
@@ -48,7 +48,7 @@ Members of Address Types
 
 Block and Transaction Properties
 ================================
-  
+
 - ``blockhash(uint blockNumber) returns (bytes32)``: hash of the given block - only works for 256 most recent blocks
 - ``block.basefee`` (``uint``): current block's base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
 - ``block.chainid`` (``uint``): current chain id
@@ -89,7 +89,7 @@ Mathematical and Cryptographic Functions
   arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
 - ``mulmod(uint x, uint y, uint k) returns (uint)``: compute ``(x * y) % k`` where the multiplication is performed
   with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
-  
+
 Contract-related
 ================
 
