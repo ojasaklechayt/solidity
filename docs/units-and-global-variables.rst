@@ -311,7 +311,7 @@ For more information, see the section on :ref:`address`.
     semantics than ``delegatecall``.
 
 
-.. index:: this, selfdestruct
+.. index:: this, selfdestruct, super
 
 Contract Related
 ----------------
