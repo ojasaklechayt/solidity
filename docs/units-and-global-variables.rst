@@ -329,6 +329,9 @@ Contract Related
 
 Furthermore, all functions of the current contract are callable directly including the current function.
 
+``super``
+    The contract one level higher in the inheritance hierarchy
+
 .. warning::
     From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
     deprecation warning, since the ``SELFDESTRUCT`` opcode will eventually undergo breaking changes in behaviour
