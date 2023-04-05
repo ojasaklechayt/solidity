@@ -9,7 +9,7 @@ Order of Precedence of Operators
 
 .. include:: types/operator-precedence-table.rst
 
-.. index:: cryptography
+.. include:: abi; decode, abi; encode, abi; encodePacked, abi; encodeWithSelector, abi; encodeCall, abi; encodeWithSignature
 
 ABI Encoding and Decoding Functions
 ===================================
@@ -27,6 +27,8 @@ ABI Encoding and Decoding Functions
 - ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent
   to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)``
 
+.. index:: bytes; concat, string; concat
+
 Members of ``bytes`` and  ``string``
 ====================================
 
@@ -36,7 +38,7 @@ Members of ``bytes`` and  ``string``
 - ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of
   arguments to one string array<string-concat>`
 
-.. index:: balance, codehash, send
+.. index:: balance, codehash, send, address; code, address; transfer
 
 Members of Address Types
 ========================
@@ -48,7 +50,7 @@ Members of Address Types
   returns ``false`` on failure
 - ``<address payable>.transfer(uint256 amount)``: send given amount of Wei to :ref:`address`, throws on failure
 
-.. index:: block, coinbase, difficulty, prevrandao, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
+.. index:: block, block; basefree,block; chainid,  coinbase, difficulty, prevrandao, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
 
 Block and Transaction Properties
 ================================
@@ -83,7 +85,7 @@ Error Reporting
 - ``revert()``: abort execution and revert state changes
 - ``revert(string memory message)``: abort execution and revert state changes providing an explanatory string
 
-.. index:: keccak256, ripemd160, sha256, ecrecover, addmod, mulmod
+.. index:: keccak256, ripemd160, sha256, ecrecover, addmod, mulmod, cryptography
 
 Mathematical and Cryptographic Functions
 ========================================
@@ -106,6 +108,8 @@ Contract-related
 - ``this`` (current contract's type): the current contract, explicitly convertible to ``address`` or ``address payable``
 - ``super``: the contract one level higher in the inheritance hierarchy
 - ``selfdestruct(address payable recipient)``: destroy the current contract, sending its funds to the given address
+
+.. index:: type; name, type; creationCode, type; runtimeCode, type; interfaceId, type; min, type; max
 
 Type Information
 ================
