@@ -317,8 +317,11 @@ Contract Related
 ----------------
 
 ``this`` (current contract's type)
-    the current contract, explicitly convertible to :ref:`address`
+    The current contract, explicitly convertible to :ref:`address`
 
+``super``
+    The contract one level higher in the inheritance hierarchy
+    
 ``selfdestruct(address payable recipient)``
     Destroy the current contract, sending its funds to the given :ref:`address`
     and end execution.
@@ -328,9 +331,6 @@ Contract Related
     - the contract is only really destroyed at the end of the transaction and ``revert`` s might "undo" the destruction.
 
 Furthermore, all functions of the current contract are callable directly including the current function.
-
-``super``
-    The contract one level higher in the inheritance hierarchy
 
 .. warning::
     From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
